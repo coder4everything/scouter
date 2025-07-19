@@ -611,6 +611,10 @@ public class Configure extends Thread {
     @ConfigValueType(ValueType.COMMA_SEPARATED_VALUE)
     public String hook_method_patterns = "";
 
+    @ConfigDesc("Class set for redefine")
+    @ConfigValueType(ValueType.COMMA_SEPARATED_VALUE)
+    public String hook_redefine_classes = "";
+
     @ConfigDesc("Prefix without Method hooking")
     @ConfigValueType(ValueType.COMMA_SEPARATED_VALUE)
     public String hook_method_ignore_prefixes = "get,set";
@@ -873,6 +877,8 @@ public class Configure extends Thread {
     private StringSet _hook_method_ignore_classes = new StringSet();
     private int enduser_perf_endpoint_hash = HashUtil.hash(enduser_trace_endpoint_url);
     private StringSet custom_jmx_set = new StringSet();
+    private String[] _hook_redefine_classes;
+
 
     /**
      * sometimes call by sample application, at that time normally set some
@@ -1035,6 +1041,10 @@ public class Configure extends Thread {
         this._log_datasource_lookup_enabled = getBoolean("_log_datasource_lookup_enabled", true);
         this.profile_connection_open_enabled = getBoolean("profile_connection_open_enabled", true);
         this._summary_connection_leak_fullstack_enabled = getBoolean("_summary_connection_leak_fullstack_enabled", false);
+
+        this.hook_redefine_classes = getValue("hook_redefine_classes","");
+        this._hook_redefine_classes = StringUtil.split(this.hook_redefine_classes, ",");
+
         this.hook_method_patterns = getValue("hook_method_patterns", "");
         this.hook_method_exclude_patterns = getValue("hook_method_exclude_patterns", "");
         this.hook_method_access_public_enabled = getBoolean("hook_method_access_public_enabled", true);
@@ -1446,6 +1456,8 @@ public class Configure extends Thread {
     public boolean isIgnoreMethodClass(String classname) {
         return _hook_method_ignore_classes.hasKey(classname);
     }
+
+    public String[] getHookRedefineClasses() {return this._hook_redefine_classes; }
 
     public synchronized void resetObjInfo() {
         String detected = ObjTypeDetector.drivedType != null ? ObjTypeDetector.drivedType

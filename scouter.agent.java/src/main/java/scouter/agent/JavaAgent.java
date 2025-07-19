@@ -81,6 +81,12 @@ public class JavaAgent {
 		redefineClasses.put("java.util.concurrent.ThreadPoolExecutor");
 		redefineClasses.put("java.lang.Thread");
 
+		String[] HookRedefinedClasses = conf.getHookRedefineClasses();
+		for(String hookRedefinedClass: HookRedefinedClasses){
+			redefineClasses.put(hookRedefinedClass);
+		}
+
+
 		//java.lang.invoke.LambdaMetafactory.*,java.lang.invoke.CallSite.*,
 		//java.lang.invoke.ConstantCallSite.*,
 		//java.lang.invoke.MutableCallSite.*,
