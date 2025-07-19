@@ -106,7 +106,7 @@ public class SaveProfileJob extends Job{
 	
 	
 	private void checkDir() {
-		String service = TextProxy.service.getText(xLogData.p.service).replaceAll("/", "_");
+		String service = TextProxy.service.getText(xLogData.p.service).replaceAll("[\\\\/:*?\"<>|]", "_");
 		if(service.length() > 80){
 			service = service.substring(0, 80);
 		}
